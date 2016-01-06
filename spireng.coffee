@@ -27,9 +27,6 @@ class Resources
         if @isReady()
           (func() for func in @readyCallbacks)
           @readyCallbacks = []
-          #@readyCallbacks.forEach (func) ->
-          #  #console.log("_load() calling func()")
-          #  func()
       @resourceCache[url] = false;
       img.src = url
 
@@ -50,22 +47,16 @@ class SpirengBase
   constructor: (canvasElement) ->
     @canvas = canvasElement
     @ctx = @canvas.getContext("2d")
-
-    #@ctx.font = "30px Comic Sans MS"
     @color = 'Black'
     @fillColor = null
-
     @ctx.strokeStyle = @color
     @ctx.fillStyle = "rgba(0, 0, 0, 0)" #set transparent fillStyle default
-
 
   width: ->
     @canvas.width
 
   height: ->
     @canvas.height
-
-
 
   #Color such as '#808080'
   setColor: (color) ->
@@ -79,7 +70,6 @@ class SpirengBase
       @ctx.fillStyle = "rgba(0, 0, 0, 0)" #set transparent
     else
       @ctx.fillStyle = @fillColor
-    console.log("@ctx.fillStyle: #{@ctx.fillStyle}")
 
   clearFillColor: ->
     @setFillColor()
@@ -185,7 +175,6 @@ class Sprite
   #Angle in degrees
   constructor: (@resource, @x=0, @y=0, @angle=0) ->
 
-
   render: (ctx) ->
     @angle = (@angle % 360)
     if @angle == 0
@@ -240,7 +229,6 @@ class SheetSprite
   render: (ctx) ->
     @angle = (@angle % 360)
     if @angle == 0
-      #context.drawImage(img,sx,sy,swidth,sheight,x,y,width,height)
       ctx.drawImage(@resource, @imageCoords[@imageNo].x, @imageCoords[@imageNo].y, @width, @height, @x, @y, @width, @height)
     else
       angleInRadians = @angle  * (Math.PI/180)
@@ -322,10 +310,7 @@ class AnimatedSprite extends SheetSprite
       @lastFrameUpdateMs = totalTimeMs
       return
     if (@lastFrameUpdateMs + @animFrameMs) < totalTimeMs
-      #console.log("Frame update time!")
-      #console.log("@lastFrameUpdateMs: #{@lastFrameUpdateMs} @animFrameMs: #{@animFrameMs} totalTimeMs: #{totalTimeMs}")
       @lastFrameUpdateMs = totalTimeMs - (totalTimeMs - (@lastFrameUpdateMs + @animFrameMs))
-      #console.log("@lastFramUpdateMs = " + @lastFrameUpdateMs)
       switch @animType
         when AnimatedSprite.FORWARD
           @nextImage()
@@ -350,10 +335,6 @@ class AnimatedSprite extends SheetSprite
               @previousImage()
 
 
-
-
-
-
 ###
   Main class for Spireng
 ###
@@ -372,9 +353,6 @@ class Spireng extends SpirengRenderer
 
   #resources singleton for convenience
   @resources = new Resources()
-
-
-
 
 
 if module?.exports?
