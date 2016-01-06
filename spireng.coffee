@@ -1,6 +1,6 @@
 
 
-
+# Resources is a resource loader class.
 class Resources
 
   constructor: ->
@@ -166,11 +166,13 @@ class SpirengRenderer extends SpirengBase
 
   #Override!
   onUpdate: (deltaTimeMs, totalTimeMs) ->
+    return (deltaTimeMs == totalTimeMs) #Dummy line to silence CoffeeLint warning about unused variables.
 
   #Override!
   onRender: ->
 
-
+# Basic sprite baseclass. Wraps an drawable resource with
+# additional properties such as position
 class Sprite
 
   #Angle in degrees
@@ -292,6 +294,8 @@ class SheetSprite
     @setImage(@numberOfImages-1)
 
 
+# Extends the basic SheetSprite with timed animations that are internally managed
+# on calls to update()
 class AnimatedSprite extends SheetSprite
 
   @PING_PONG     = 1
@@ -340,7 +344,7 @@ class AnimatedSprite extends SheetSprite
 
 
 # A sprite layer is basically a container for sprites that can be drawn together
-# The "layer" part is when using several containers in unison and drawing them
+# The "layer" part is when using several layers/containers in unison and drawing them
 # at a certain order ensures the "z-order" on the screen.
 # (Imagine layers like "ground", "players" etc. players should probably ALWAYS
 #  be drawn AFTER the ground they are supposedly standing on)
@@ -372,6 +376,7 @@ class SpriteLayer
 
 ###
   Main class for Spireng
+  Extends the engine with SpriteLayer management
 ###
 class Spireng extends SpirengRenderer
 
@@ -410,7 +415,6 @@ class Spireng extends SpirengRenderer
 
   clearSpriteLayers: ->
     @spriteLayers = []
-
 
 if module?.exports?
   module.exports = Spireng

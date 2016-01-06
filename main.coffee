@@ -23,8 +23,8 @@ class MyTest1 extends Spireng
     # images automatically. (Sprites insize layers are managed, so they get updates automatically)
     hunter.update(deltaTimeMs, totalTimeMs)
 
-    bulletLayer.x = totalTimeMs/10 % 100
-    bulletLayer.y = -totalTimeMs/10 % 100
+    bulletLayer.x = Math.sin(totalTimeMs / 100 % 360) * 10
+    bulletLayer.y = Math.cos(-totalTimeMs / 100 % 360) * 10
 
   #Override from Spireng.
   #This is where we place things drawn every frame.
