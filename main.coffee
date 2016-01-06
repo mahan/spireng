@@ -28,6 +28,12 @@ class MyTest1 extends Spireng
     # Don't forget super() on override
     super()
 
+    #Check that initial color is visible
+    @setLineWidth(20)
+    @plot(300, 10)
+    @setLineWidth(1)
+
+
     #Color for every draw operation (rect, line, text etc.)
     #Once you set this, it's assumed for all draw operations that follow during the life of onRender()
     @setColor("White")
@@ -91,7 +97,7 @@ main = ->
 
   #By instanciating our (Spireng based) class we start up the show.
   myTest = new MyTest1()
-  myTest.setClsColor("Black") #This is if you want to clear the screen with a specific color before each frame.
+  myTest.setClsColor("black") #This is if you want to clear the screen with a specific color before each frame.
 
 
 # This is the starting point of the program.

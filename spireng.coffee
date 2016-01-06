@@ -79,6 +79,7 @@ class SpirengBase
       @ctx.fillStyle = "rgba(0, 0, 0, 0)" #set transparent
     else
       @ctx.fillStyle = @fillColor
+    console.log("@ctx.fillStyle: #{@ctx.fillStyle}")
 
   clearFillColor: ->
     @setFillColor()
@@ -156,13 +157,14 @@ class SpirengRenderer extends SpirengBase
 
     @onUpdate(dt, t)
     if @clsColor?
-      @setFillColor("Black")
-      @setColor("Black")
-      @ctx.fillStyle = 'Black'
+      @setFillColor(@clsColor)
+      @setColor(@clsColor)
+      @ctx.fillStyle = @clsColor
       @ctx.fillRect(0, 0, @width(), @height())
+      @setColor()
     else
       @ctx.clearRect(0, 0, @width(), @height())
-    @setColor("Black")
+    @setColor("#808080") #Set gray as default color.
     @clearFillColor()
     @setLineWidth(1)
     @onRender()
