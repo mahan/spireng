@@ -8,6 +8,7 @@ Features (very basic):
     * Sprites (with rotation)
     * Sprite animations (based on sprite sheets)
     * Resource loader
+    * Sprite layers
     * Handles resizing of the drawing area (browser). (Note: It always covers the full browser window by design)
 
 It forms the basis of another pet-project of mine, not yet published.

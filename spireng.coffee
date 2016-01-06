@@ -121,7 +121,8 @@ class SpirengRenderer extends SpirengBase
 
     @startTime = Date.now()
     @clsColor = null
-    @mainLoop()
+    requestAnimationFrame =>
+      @mainLoop()
 
 
   setClsColor: (clsColor) ->
@@ -174,6 +175,9 @@ class Sprite
 
   #Angle in degrees
   constructor: (@resource, @x=0, @y=0, @angle=0) ->
+
+  update: ->
+    #Basic sprites do not need updating.
 
   render: (ctx) ->
     @angle = (@angle % 360)
@@ -351,6 +355,9 @@ class SpriteLayer
   removeSprite: (sprite) ->
     @sprites = (s for s in @sprites when s isnt sprite)
 
+  clear: ->
+    @sprites = []
+
   update: (deltaTimeMs, totalTimeMs) ->
     for sprite in @sprites
       sprite.update(deltaTimeMs, totalTimeMs)
@@ -370,6 +377,7 @@ class Spireng extends SpirengRenderer
 
   constructor: ->
     super()
+    @spriteLayers = []
 
   #Accessors allows users of this library to access all internal classes
   @SpirengBase: SpirengBase
@@ -382,6 +390,26 @@ class Spireng extends SpirengRenderer
 
   #resources singleton for convenience
   @resources = new Resources()
+
+  onUpdate: (deltaTimeMs, totalTimeMs) ->
+    super(deltaTimeMs, totalTimeMs)
+    for layer in @spriteLayers
+      layer.update(deltaTimeMs, totalTimeMs)
+
+  onRender: ->
+    super()
+    for layer in @spriteLayers
+      layer.render(@ctx)
+
+
+  addSpriteLayer: (spriteLayer) ->
+    @spriteLayers.push spriteLayer
+
+  removeSpriteLayer: (spriteLayer) ->
+    @spriteLayers = (l for l in @spriteLayers when l isnt spriteLayer)
+
+  clearSpriteLayers: ->
+    @spriteLayers = []
 
 
 if module?.exports?

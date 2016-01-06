@@ -4,7 +4,6 @@ bunny = null
 hunter = null
 
 bulletLayer = null
-hunterLayer = null
 
 # By extending (inheriting) from Spireng our class gets access to methods
 # for basic drawing operations.
@@ -21,24 +20,17 @@ class MyTest1 extends Spireng
     @deltaTimeMs = deltaTimeMs
 
     # We notify the animated sprite about the update so that it can update the
-    # images automatically. (This is likely to be handled inside the engine soon)
+    # images automatically. (Sprites insize layers are managed, so they get updates automatically)
     hunter.update(deltaTimeMs, totalTimeMs)
 
-    hunterLayer.update(deltaTimeMs, totalTimeMs)
-
+    bulletLayer.x = totalTimeMs/10 % 100
+    bulletLayer.y = -totalTimeMs/10 % 100
 
   #Override from Spireng.
   #This is where we place things drawn every frame.
   onRender: ->
     # Don't forget super() on override
     super()
-
-
-    bulletLayer.x = @totalTimeMs/10 % 100
-    bulletLayer.y = -@totalTimeMs/10 % 100
-    bulletLayer.render(@ctx)
-
-    hunterLayer.render(@ctx)
 
     #Check that initial color is visible
     @setLineWidth(20)
@@ -126,6 +118,9 @@ main = ->
 
   #By instanciating our (Spireng based) class we start up the show.
   myTest = new MyTest1()
+  #Sprites in layers added to the engine are 'managed' so they get updated and drawn automatically.
+  myTest.addSpriteLayer(bulletLayer)
+  myTest.addSpriteLayer(hunterLayer)
   myTest.setClsColor("black") #This is if you want to clear the screen with a specific color before each frame.
 
 
