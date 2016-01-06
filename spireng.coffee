@@ -297,7 +297,7 @@ class AnimatedSprite extends SheetSprite
   @BACKWARD_ONCE = 5
 
   constructor: (@resource, @width, @height, @numberOfImages, @animType, @animFrameMs, @x=0, @y=0, @angle=0) ->
-    super(@resource, @width, @height, @numberOfImages, @x=0, @y=0, @angle=0)
+    super(@resource, @width, @height, @numberOfImages, @x, @y, @angle)
     @lastFrameUpdateMs = 0
     @pingPongForward = true #special variable for pingpong
 
@@ -335,6 +335,34 @@ class AnimatedSprite extends SheetSprite
               @previousImage()
 
 
+# A sprite layer is basically a container for sprites that can be drawn together
+# The "layer" part is when using several containers in unison and drawing them
+# at a certain order ensures the "z-order" on the screen.
+# (Imagine layers like "ground", "players" etc. players should probably ALWAYS
+#  be drawn AFTER the ground they are supposedly standing on)
+class SpriteLayer
+
+  constructor: (@x = 0, @y = 0) ->
+    @sprites = []
+
+  addSprite: (sprite) ->
+    @sprites.push(sprite)
+
+  removeSprite: (sprite) ->
+    @sprites = (s for s in @sprites when s isnt sprite)
+
+  update: (deltaTimeMs, totalTimeMs) ->
+    for sprite in @sprites
+      sprite.update(deltaTimeMs, totalTimeMs)
+
+  render: (ctx) ->
+    ctx.translate(@x, @y)
+    for sprite in @sprites
+      sprite.render(ctx)
+    ctx.translate(-@x, -@y)
+
+
+
 ###
   Main class for Spireng
 ###
@@ -350,6 +378,7 @@ class Spireng extends SpirengRenderer
   @Sprite: Sprite
   @SheetSprite: SheetSprite
   @AnimatedSprite: AnimatedSprite
+  @SpriteLayer: SpriteLayer
 
   #resources singleton for convenience
   @resources = new Resources()

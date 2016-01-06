@@ -3,6 +3,9 @@
 bunny = null
 hunter = null
 
+bulletLayer = null
+hunterLayer = null
+
 # By extending (inheriting) from Spireng our class gets access to methods
 # for basic drawing operations.
 class MyTest1 extends Spireng
@@ -21,12 +24,21 @@ class MyTest1 extends Spireng
     # images automatically. (This is likely to be handled inside the engine soon)
     hunter.update(deltaTimeMs, totalTimeMs)
 
+    hunterLayer.update(deltaTimeMs, totalTimeMs)
+
 
   #Override from Spireng.
   #This is where we place things drawn every frame.
   onRender: ->
     # Don't forget super() on override
     super()
+
+
+    bulletLayer.x = @totalTimeMs/10 % 100
+    bulletLayer.y = -@totalTimeMs/10 % 100
+    bulletLayer.render(@ctx)
+
+    hunterLayer.render(@ctx)
 
     #Check that initial color is visible
     @setLineWidth(20)
@@ -87,6 +99,9 @@ class MyTest1 extends Spireng
     hunter.render(@ctx)
 
 
+randInt = (min, max) ->
+  return Math.floor(Math.random() * (max - min + 1)) + min
+
 # main get's called right after resources are loaded (see below)
 main = ->
 
@@ -95,6 +110,20 @@ main = ->
   AnimatedSprite = Spireng.AnimatedSprite
   hunter = new AnimatedSprite(Spireng.resources.get("hunter_looking_sw.png"), 96, 96, 12, AnimatedSprite.FORWARD, 100)
 
+  #We try out the sprite layer:
+  bulletLayer = new Spireng.SpriteLayer()
+  for x in [0..600] by 200
+    for y in [0..600] by 200
+      bulletLayer.addSprite(new Spireng.Sprite(Spireng.resources.get("bullet.png"), x, y))
+
+  #We try out the sprite layer with animated sprites:
+  hunterLayer = new Spireng.SpriteLayer()
+  for x in [0..600] by 100
+    for y in [0..600] by 100
+      hunterLayer.addSprite(new AnimatedSprite(Spireng.resources.get("hunter_looking_sw.png"), 96, 96, randInt(1, 13), AnimatedSprite.FORWARD, 100, x, y))
+
+
+
   #By instanciating our (Spireng based) class we start up the show.
   myTest = new MyTest1()
   myTest.setClsColor("black") #This is if you want to clear the screen with a specific color before each frame.
@@ -102,4 +131,4 @@ main = ->
 
 # This is the starting point of the program.
 # We specify the resources (images) we want loaded before the game starts.
-Spireng.resources.load(["bunny.png", "hunter_looking_sw.png"]).addReadyListener(main)
+Spireng.resources.load(["bunny.png", "hunter_looking_sw.png", "bullet.png"]).addReadyListener(main)
