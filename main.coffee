@@ -20,7 +20,7 @@ class MyTest1 extends Spireng
     @text("totalTimeMs: #{@totalTimeMs}", 50, 10)
 
     @setColor("#A0A0A0")
-    @text("totalTimeMs: #{@deltaTimeMs}", 150, 10)
+    @text("deltaTimeMs: #{@deltaTimeMs}", 150, 10)
 
 
     @setColor('#8080A0')
